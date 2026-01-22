@@ -6,21 +6,21 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   const isPublicPath =
-    path === '/sign-up' ||
-    path === '/sign-in' ||
-    path === '/verify' ||
-    path === '/';
+    path === '/' ||
+    path === '/login' ||
+    path === '/signup' ||
+    path === '/verifyemail';
 
   const token = await getToken({ req: request });
 
   // logged-in user public page pe gaya → dashboard bhejo
   if (isPublicPath && token) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect(new URL('/dash', request.url));
   }
 
   // non-logged-in user protected page pe gaya → sign-in
   if (!isPublicPath && !token) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   return NextResponse.next();
@@ -28,14 +28,15 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/Dos',
-    '/Home',
+    '/',
     '/login',
-    '/profiles',
     '/signup',
-    '/start',
     '/verifyemail',
+    '/dos',
+    '/home',
+    '/profiles',
     '/dash',
+    '/start',
     '/password',
     '/update',
   ],
